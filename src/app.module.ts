@@ -9,7 +9,9 @@ import SocketModule from './socket/socket.module';
     ProctorModule,
     SocketModule
   ],
-  controllers: [AppController],
+  controllers: [
+    AppController
+  ],
   providers: [AppService],
 })
 export class AppModule {}
