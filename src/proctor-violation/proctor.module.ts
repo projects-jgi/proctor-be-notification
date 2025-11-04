@@ -3,12 +3,16 @@ import ProctorController from "./proctor.controller";
 import ProctorService from "./proctor.service";
 import { ClientsModule, MessagePattern, Payload, Transport } from "@nestjs/microservices";
 import { HttpModule } from "@nestjs/axios";
+import { SocketGateway } from "src/socket/socket.gateway";
 
 @Module({
     controllers: [
         ProctorController,
     ],
-    providers: [ProctorService],
+    providers: [
+        ProctorService,
+        SocketGateway
+    ],
     imports: [
         HttpModule,
         ClientsModule.register([

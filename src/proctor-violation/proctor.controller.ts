@@ -3,11 +3,16 @@ import { Controller } from "@nestjs/common";
 import { EventPattern, MessagePattern, Payload } from "@nestjs/microservices";
 import { lastValueFrom } from "rxjs";
 import ProctorService from "./proctor.service";
+import { SocketGateway } from "src/socket/socket.gateway";
 
 @Controller()
 export default class ProctorController{
 
-    constructor(private readonly http: HttpService, private readonly service: ProctorService){}
+    constructor(
+        private readonly http: HttpService,
+        private readonly service: ProctorService,
+        private readonly socket: SocketGateway
+    ){}
 
     @EventPattern("exam")
     async handleExam(@Payload() message: any){
@@ -20,9 +25,12 @@ export default class ProctorController{
                 ...message,
                 data: response.data
             }
-            console.log(violation_data)
+            // console.log(violation_data)
 
             this.service.send_exam_violation(violation_data)
+            if(violation_data.data.is_violation){
+                this.socket.send_exam_violation(violation_data)
+            }
         }catch(err){
             console.log(err)
         }

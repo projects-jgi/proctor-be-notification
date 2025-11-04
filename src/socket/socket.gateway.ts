@@ -16,4 +16,9 @@ export class SocketGateway{
             "message": data
         }
     }
+
+    send_exam_violation(data){
+        // TODO: Change this to specific user
+        this.server.emit("exam-attempt-violation", data)
+    }
 }
