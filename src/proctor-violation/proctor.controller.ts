@@ -4,6 +4,7 @@ import { EventPattern, MessagePattern, Payload } from "@nestjs/microservices";
 import { lastValueFrom } from "rxjs";
 import ProctorService from "./proctor.service";
 import { SocketGateway } from "src/socket/socket.gateway";
+import type { KafkaExamMessage } from "src/types/type";
 
 @Controller()
 export default class ProctorController{
@@ -15,7 +16,7 @@ export default class ProctorController{
     ){}
 
     @EventPattern("exam")
-    async handleExam(@Payload() message: any){
+    async handleExam(@Payload() message: KafkaExamMessage){
         try{
             const response = await lastValueFrom(
                 this.http.get(process.env.PROCTOR_AI_URL + "/analyze_enhanced?image_url=" + message.resource_url)
