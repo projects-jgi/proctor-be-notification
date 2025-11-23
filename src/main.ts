@@ -10,7 +10,7 @@ async function bootstrap() {
     options: {
       client: {
         clientId: "notification-service",
-        brokers: ['localhost:9094']
+        brokers: ['kafka:9092']
       },
       consumer: {
         groupId: 'notification-consumer'

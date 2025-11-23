@@ -22,7 +22,7 @@ import { SocketGateway } from "src/socket/socket.gateway";
                 options: {
                     client: {
                         clientId: "exam-violation-service",
-                        brokers: ['localhost:9094']
+                        brokers: ['kafka:9092']
                     },
                     producer: {
                         allowAutoTopicCreation: true

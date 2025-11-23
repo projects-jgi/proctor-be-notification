@@ -18,7 +18,7 @@ export default class ProctorController{
     async handleExam(@Payload() message: any){
         try{
             const response = await lastValueFrom(
-                this.http.get("http://localhost:8000/analyze_enhanced?image_url=" + message.resource_url)
+                this.http.get(process.env.PROCTOR_AI_URL + "/analyze_enhanced?image_url=" + message.resource_url)
             )
             
             const violation_data = {
