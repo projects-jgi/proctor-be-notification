@@ -9,14 +9,14 @@ async function bootstrap() {
     transport: Transport.KAFKA,
     options: {
       client: {
-        clientId: "notification-service",
-        brokers: ['kafka:9092']
+        clientId: 'notification-service',
+        brokers: ['kafka:9092'],
       },
       consumer: {
-        groupId: 'notification-consumer'
-      }
-    }
-  })
+        groupId: 'notification-consumer',
+      },
+    },
+  });
 
   await app.startAllMicroservices();
   await app.listen(process.env.PORT ?? 3333);

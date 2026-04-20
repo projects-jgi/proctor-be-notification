@@ -1,17 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import ProctorModule from './proctor-violation/proctor.module';
+import { S3Module } from './s3/s3.module';
 import SocketModule from './socket/socket.module';
+import ProctorModule from './proctor/proctor.module';
 
 @Module({
-  imports: [
-    ProctorModule,
-    SocketModule
-  ],
-  controllers: [
-    AppController
-  ],
+  imports: [SocketModule, ProctorModule],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
