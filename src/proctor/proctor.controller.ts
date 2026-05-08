@@ -51,6 +51,35 @@ export default class ProctorController {
   //   }
   // }
 
+  @EventPattern('exam-attempt-violation-all')
+  async handleExamAttemptViolation(@Payload() message) {
+    console.log('Received violation message:', message);
+
+    const redis_key_name = `violation:exam-${message.exam_id}:attempt-${message.attempt_id}:type-${message.type}`;
+    const cached_violation = await this.redis.get(redis_key_name);
+
+    if (cached_violation === null) {
+      // store the violation in redis with a TTL of 3 seconds, to prevent duplication of violation notifications for the same frame
+      // if a violation of same type for the same exam attempt already exists in redis, do not send another notification
+      await this.redis.set(redis_key_name, message.description, 3);
+
+      this.socket.send_exam_violation({
+        exam_id: message.exam_id,
+        attempt_id: message.attempt_id,
+        description: message.description,
+      });
+      this.kafka.emit('exam-attempt-violation', {
+        exam_id: message.exam_id,
+        attempt_id: message.attempt_id,
+        description: message.description,
+        reference_url: message.reference_url,
+      });
+    } else {
+      // TODO: delete the frame from S3, as it is not a violation or a duplicate violation notification
+      // this.s3.deleteExamAttemptFrame(message.image_key);
+    }
+  }
+
   @EventPattern('exam-attempt-frame')
   async handleExamAttemptFrame(
     @Payload() message: KafkaExamAttemptFrameMessage,
